@@ -1,3 +1,4 @@
+
 #include <chrono>
 #include <cstdlib>
 #include <iostream>
@@ -5,44 +6,36 @@
 using namespace std;
 using namespace std::chrono;
 
-void randomMatrix(int* matrix, int rows, int cols) {
-    for (int i = 0; i < rows * cols; ++i) {
-        matrix[i] = rand() % 100;
-    }
-}
-
-void matrixMultiply(int* A, int* B, int* C, int rowsA, int colsA, int colsB) {
-    for (int i = 0; i < rowsA; ++i) {
-        for (int j = 0; j < colsB; ++j) {
-            C[i * colsB + j] = 0;
-            for (int k = 0; k < colsA; ++k) {
-                C[i * colsB + j] += A[i * colsA + k] * B[k * colsB + j];
-            }
-        }
+void randomVector(int* vector, int size) {
+    for (int i = 0; i < size; i++) {
+        vector[i] = rand() % 100;
     }
 }
 
 int main() {
-    unsigned long size = 1000; // Size of matrix (size x size)
+    unsigned long size = 100000000;
     srand(time(0));
-    int *A, *B, *C;
-    auto start = high_resolution_clock::now();
-    A = new int[size * size];
-    B = new int[size * size];
-    C = new int[size * size];
-    randomMatrix(A, size, size);
-    randomMatrix(B, size, size);
+    int *v1, *v2, *v3;
 
-    matrixMultiply(A, B, C, size, size, size);
+    auto start = high_resolution_clock::now();
+
+    v1 = new int[size];
+    v2 = new int[size];
+    v3 = new int[size];
+    randomVector(v1, size);
+    randomVector(v2, size);
+
+    for (int i = 0; i < size; i++) {
+        v3[i] = v1[i] + v2[i];
+    }
 
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
     cout << "Sequential multiplication time: " << duration.count() << " microseconds" << endl;
 
-    delete[] A;
-    delete[] B;
-    delete[] C;
+    delete[] v1;
+    delete[] v2;
+    delete[] v3;
 
     return 0;
 }
-
